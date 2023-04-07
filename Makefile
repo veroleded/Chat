@@ -1,5 +1,5 @@
 install:
-	npm ci & cd frontend && npm ci
+	npm ci
 
 start-backend: 
 	npx start-server
