@@ -3,40 +3,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useFormik } from "formik";
-import _ from 'lodash';
+import * as Yup from 'yup';
 import { actions as channelsActions, channelsSelectors } from '../../../slices/channelsSlice.js';
+import socket from "../../../initSocket.js";
 
 
 const ModalAdd = ({ handleClose }) => {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
   const [validityForm, setValidityForm] = useState(null);
-  const [feedbackType, setFeedbackType] = useState(null);
   const channels = useSelector(channelsSelectors.selectAll);
+  const channelsName = channels.map((channel) => channel.name);
 
   const feedback = {
     notUnique: t('mainPage.modal.err_feedback_add'),
     emptyField: t('mainPage.modal.err_feedback_field'),
   }
-
+  const validationSchema = Yup.object({
+    channelName: Yup.string()
+      .min(1).required(feedback.emptyField).notOneOf(channelsName, feedback.notUnique),
+  })
   const formik = useFormik({
-    initialValues: { text: '' },
-    onSubmit:  (values) => {
-      const newChannelName = values.text.trim();
-      const matches = channels.find((channel) => channel.name === newChannelName)
-      if (matches) {
-        setValidityForm('is-invalid');
-        setFeedbackType('notUnique');
-      } else if (newChannelName === '') {
-        setValidityForm('is-invalid');
-        setFeedbackType('emptyField');
-      } else {
-        const id = _.uniqueId('channel');
-        const newChannel = { id: id, name: newChannelName, removable: true };
-        dispatch(channelsActions.addChannel(newChannel));
-        dispatch(channelsActions.setCurrentChannelId(id));
+    initialValues: { channelName: '' },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const newChannelName = values.channelName.trim();
+        socket.emit('newChannel', { name: newChannelName});
         handleClose();
-      }
     }
   })
 
@@ -51,16 +43,15 @@ const ModalAdd = ({ handleClose }) => {
             <Form.Control
               variant="dark"
               type='text'
-              name='text'
-              className={validityForm}
+              name='channelName'
               values={formik.values.text}
               onChange={formik.handleChange}
               autoFocus
               onFocus={() => setValidityForm(null)}
             />
-            <Form.Control.Feedback type="invalid">
-              {feedback[feedbackType]}
-            </Form.Control.Feedback>
+            {formik.touched.channelName && formik.errors.channelName 
+            ? (<p className='feedback m-0 position-absolute small text-danger'>{formik.errors.channelName}</p>)
+              : null}
           </FormGroup>
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
             <Button variant="secondary" className="m-2" onClick={handleClose}>

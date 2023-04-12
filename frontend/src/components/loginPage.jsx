@@ -15,14 +15,14 @@ const loginPage = ( {props }) => {
   const [validity, setValidity] = useState(null);
   const auth = useAuth();
 
-  const loginSchema = Yup.object({
+  const validationSchema = Yup.object({
     username: Yup.string().max(15, t('loginPage.err_message.usernameMax')).required(t('loginPage.err_message.usernameRequired')),
     password: Yup.string().min(5, t('loginPage.err_message.passwordMin')).required(t('loginPage.err_message.passwordRequired')),
   });
 
   const formik = useFormik({
     initialValues: { username: '', password: '' },
-    validationSchema: loginSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
         const response = await axios.post(routes.loginPath(), values);
@@ -39,8 +39,8 @@ const loginPage = ( {props }) => {
     <div className="container-fluid">
       <div className="row justify-content-center pt-5">
         <div className="col-sm-4">
-            <h2 className="text-center">{
-              t('loginPage.login')}
+            <h2 className="text-center">
+              {t('loginPage.login')}
             </h2>
           </div> 
           <Form onSubmit={formik.handleSubmit}>

@@ -10,7 +10,7 @@ const messagesSlice = createSlice({
   reducers: {
     addMessage: messagesAdapter.addOne,
     addMessages: messagesAdapter.addMany,
-    removeMessages: messagesAdapter.removeOne,
+    removeMessage: messagesAdapter.removeOne,
   },
   // extraReducers: ();
 });

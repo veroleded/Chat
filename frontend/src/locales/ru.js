@@ -26,6 +26,7 @@ export default {
       rename: 'Переименовать',
       remove: 'Удалить',
       add: 'Добавить',
+      messageNotSent: 'Сообщение не оправлено, попробуйте еще раз',
       message_one: '{{count}} сообщение',
       message_few: '{{count}} сообщения',
       message_many: '{{count}} сообщений',
@@ -34,9 +35,12 @@ export default {
       modal:  {
         cancel: 'Отменить',
         addChannel: 'Добавить канал',
+        renameChannel: 'Переименовать канал',
+        removeChannel: 'Удалить канал',
+        removeQuestion: 'Вы уверены?',
         err_feedback_add: 'Такой канал уже существует',
         err_feedback_field: 'Поле обязательно',
-      }
+      },
     },
   },
 };

@@ -1,4 +1,6 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
+import socket from '../initSocket';
+
 
 const channelsAdapter = createEntityAdapter();
 
@@ -10,7 +12,8 @@ const channelsSlice = createSlice({
   reducers: {
     addChannel: channelsAdapter.addOne,
     addChannels: channelsAdapter.addMany,
-    removeChanel: channelsAdapter.removeOne,
+    removeChannel: channelsAdapter.removeOne,
+    renameChannel: channelsAdapter.updateOne,
     setCurrentChannelId: (state, { payload }) => {
       state.currentChannelId = payload;
     }

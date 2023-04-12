@@ -5,7 +5,6 @@ import LoginPage from './loginPage.jsx'
 import Navbar from './navbar.jsx';
 import MainPage from './mainPage/index.jsx';
 import AuthContext from '../contexts/index.jsx';
-import useAuth from '../hooks/index.jsx';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import store from '../slices/index.js';

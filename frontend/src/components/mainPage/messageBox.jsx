@@ -5,20 +5,48 @@ import { useFormik  } from 'formik';
 import { Form } from 'react-bootstrap';
 import { actions as channelsActions, channelsSelectors } from '../../slices/channelsSlice.js';
 import { actions as messagesActions, messagesSelectors } from '../../slices/messagesSlice.js';
+import { useEffect, useRef } from 'react';
+import socket from '../../initSocket.js';
+import { useState } from 'react';
 
 
 
 const MessagesBox = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const [messageState, setMessageState] = useState('g');
   const currentChannel = useSelector((state) => state.channels.currentChannelId);
   const channels = useSelector(channelsSelectors.selectAll);
   const messages = useSelector(messagesSelectors.selectAll);
   const curChannelName = channels.find(({ id }) => id === currentChannel).name;
-  console.log(channels, currentChannel)
+  const inputEl = useRef(null);
+  const lastMessageRef = useRef(null);
+
+  socket.on('newMessage', (payload,) => {
+    dispatch(messagesActions.addMessage(payload));
+  })
+
   const formik = useFormik({
     initialValues: { text: '' },
-    onSubmit: () => {}
-  })
+    onSubmit: (values, {resetForm}) => {
+      const messageData = { body: values.text, channelId: currentChannel, username: 'admin' };
+      socket.emit('newMessage', messageData, (response) => {
+        if (response.status === 'ok') {
+          resetForm();
+        } else {
+          setMessageState('notSent');
+        }
+      });
+    }
+  });
+
+  useEffect(() => {
+    inputEl.current.focus();
+  }, [currentChannel]);
+
+  useEffect(() => {
+    lastMessageRef?.current?.scrollIntoView();
+  }, [messages])
 
   return (
     <div className="col p-0 h-100 card">
@@ -29,24 +57,34 @@ const MessagesBox = () => {
             {curChannelName}
           </p>
           <span className="text-muted">
-            {t('mainPage.message', {count: messages.length})}
+            {t('mainPage.message', {count: messages.filter((message) => message.channelId === currentChannel).length})}
           </span>
         </div>
         <div className="chat-messages overflow-auto px-5 ">
-          <div className="text-break mb-2">
-          <p>asd</p><p>asd</p><p>asd</p>
-          </div>
+          {messages.map((message, index) => {
+            if (message.channelId === currentChannel) {
+              const ref = index === messages.length - 1 ? lastMessageRef : null; 
+              return (
+                <div className="text-break mb-2" ref={ref} key={message.id}>
+                  <b>{message.username}</b>: {message.body}
+                </div>
+                );
+              }
+            })}
         </div>
         <div className="mt-auto px-5 py-3">
-        <Form onSubmit={formik.handleSubmit} className="py-1 border rounded-2">
+
+        <Form onSubmit={formik.handleSubmit} className="py-1 m-2 border rounded-2">
             <Form.Group className="input-group has-validation">
-              <Form.Control
+              <Form.Control 
+                ref={inputEl}
                 type= "text"
                 name="text"
                 placeholder={t('mainPage.placeholder')}
                 value={formik.values.text}
                 onChange={formik.handleChange}
                 className="border-0 p-0 ps-2 form-control"
+                onFocus={() => setMessageState(null)}
               />
               <button type="submit" className="btn btn-group-vertical" >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
@@ -58,6 +96,7 @@ const MessagesBox = () => {
                 <span className="visually-hidden">{t('mainPage.send')}</span>
               </button>
             </Form.Group>
+            {messageState && <p className='feedback m-1 position-absolute small text-danger'>{t('mainPage.messageNotSent')}</p>}
           </Form>
         </div>
       </div>

@@ -26,6 +26,7 @@ export default {
       rename: 'Rename',
       remove: 'Remove',
       add: 'Add',
+      messageNotSent: 'No message sent, try again',
       message_one: '{{count}} message',
       message_other: '{{count}} mesages',
       send: 'Send',
@@ -33,6 +34,9 @@ export default {
       modal:  {
         cancel: 'Cancel',
         addChannel: 'Add channel',
+        renameChannel: 'Rename channel',
+        removeChannel: 'Remove channel',
+        removeQuestion: 'Are you sure?',
         err_feedback_add: 'Such a channel already exists',
         err_feedback_field: 'The field is required'
       }

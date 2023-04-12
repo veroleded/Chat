@@ -10,6 +10,9 @@ import routes from "../../routes";
 import ChannelsBox from "./ChannelsBox.jsx";
 import MessagesBox from "./messageBox.jsx";
 import ModalAdd from "./modals/modalAd";
+import ModalRemove from "./modals/modalRemove";
+import ModalRename from "./modals/modalRename";
+import socket from "../../initSocket";
 
 import { actions as channelsActions, channelsSelectors } from '../../slices/channelsSlice.js';
 import { actions as messagesActions, messagesSelectors } from '../../slices/messagesSlice.js';
@@ -56,8 +59,8 @@ const MainPage = () => {
 
   }, []);
 
-  const handleAddChannel = () => {
-    setModalState({ modalType: 'add', target: null })
+  const handleModal = (newModalState) => () => {
+    setModalState(newModalState);
   };
 
   const handleCloseModal = () => {
@@ -68,7 +71,12 @@ const MainPage = () => {
     switch(modalState.modalType) {
       case 'add': 
         return <ModalAdd handleClose={handleCloseModal}/>
-
+      
+      case 'remove':
+        return <ModalRemove handleClose={handleCloseModal} id={modalState.target} />
+      
+      case 'rename': 
+        return <ModalRename handleClose={handleCloseModal} id={modalState.target} />
       default:
         return null;
     }
@@ -76,8 +84,8 @@ const MainPage = () => {
   return (
       <div className="row h-100 bg-white flex-md-row">
         {getModal()}
-        {currentChannel && <ChannelsBox addChannel={handleAddChannel}/>}
-        {currentChannel && <MessagesBox channels={channelsState} currentChannel={currentChannel}/>}
+        {currentChannel && <ChannelsBox handleModal={handleModal} />}
+        {currentChannel && <MessagesBox />}
       </div>  
   );
 };
