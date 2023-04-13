@@ -12,7 +12,6 @@ import MessagesBox from "./messageBox.jsx";
 import ModalAdd from "./modals/modalAd";
 import ModalRemove from "./modals/modalRemove";
 import ModalRename from "./modals/modalRename";
-import socket from "../../initSocket";
 
 import { actions as channelsActions, channelsSelectors } from '../../slices/channelsSlice.js';
 import { actions as messagesActions, messagesSelectors } from '../../slices/messagesSlice.js';
@@ -28,34 +27,29 @@ const MainPage = () => {
   const [modalState, setModalState] = useState({ modalType: null, target: null });
 
   useEffect(() => {
-    const token = localStorage.getItem('userId');
-
-    if (!token && !auth.loggedIn) {
-      navigate('login');
-
-    } else  {
+    const headers = auth.getAuthHeader();
     const foo = async () => {
-      const headers = { Authorization: `Bearer ${token}` };
 
-        try { 
-          const response = await axios.get(routes.dataPath(), { headers });
-          const { channels, messages, currentChannelId } = response.data;
+      try { 
+        const response = await axios.get(routes.dataPath(), { headers });
+        const { channels, messages, currentChannelId } = response.data;
 
-          const normalizeChannelsData = channels
-            .reduce((acc, channel) => ({ ...acc, [channel.id]: channel }), {});
-          const normalizeMessagesData = messages
-            .reduce((acc, message) => ({ ...acc, [message.id]: message }), {});
+        const normalizeChannelsData = channels
+          .reduce((acc, channel) => ({ ...acc, [channel.id]: channel }), {});
+        const normalizeMessagesData = messages
+          .reduce((acc, message) => ({ ...acc, [message.id]: message }), {});
 
-          dispatch(channelsActions.addChannels(normalizeChannelsData));
-          dispatch(messagesActions.addMessages(normalizeMessagesData));
-          dispatch(channelsActions.setCurrentChannelId(currentChannelId));
-        } catch(err) {
-          console.error(err);
+        dispatch(channelsActions.addChannels(normalizeChannelsData));
+        dispatch(messagesActions.addMessages(normalizeMessagesData));
+        dispatch(channelsActions.setCurrentChannelId(currentChannelId));
+      } catch(err) {
+        if (err.response?.status == 401) {
+          navigate('login');
         }
-      };
+      }
+    };
 
-      foo();
-    }
+    foo();
 
   }, []);
 

@@ -8,6 +8,8 @@ export default {
       submit: 'Submit',
       err_feedback_msge: 'The username or password is incorrect',
       login: 'Login',
+      noAccount: 'No account?',
+      registration: 'Regestration',
       err_message: {
         usernameMax: 'Must be 15 characters or less',
         usernameRequired: 'Username is required',
@@ -38,8 +40,24 @@ export default {
         removeChannel: 'Remove channel',
         removeQuestion: 'Are you sure?',
         err_feedback_add: 'Such a channel already exists',
-        err_feedback_field: 'The field is required'
-      }
+        err_feedback_field: 'The field is required',
+        err_feedback_space: 'The channel name must contain the characters',
+      },
     },
+    signup: {
+      required: 'Required',
+      passMin: 'Min 6 characters',
+      mustMatch: 'Passwords must match',
+      username: 'Username',
+      usernameConstraints: '3 to 20 characters',
+      password: 'Password',
+      confirm: 'Confirm password',
+      alreadyExists: 'Username already taken',
+      submit: 'Submit',
+      header: 'Signup',
+      haveAccount: 'Have account?',
+      login: 'login',
+    },
+    logaut: 'Logaut',
   },
 };

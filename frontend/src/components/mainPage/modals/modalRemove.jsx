@@ -3,13 +3,16 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { actions as channelsActions, channelsSelectors } from '../../../slices/channelsSlice.js';
 import socket from "../../../initSocket.js";
+import { useApi } from "../../../hooks/index.jsx";
 
 const ModalRemove = ({ handleClose ,id}) => {
   const { t } = useTranslation();
+  const socketApi = useApi();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit('removeChannel' , {id});
+    socketApi.removeChannel({id});
+    // socket.emit('removeChannel' , {id});
     handleClose();
   };
 

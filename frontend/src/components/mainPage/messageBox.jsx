@@ -8,10 +8,16 @@ import { actions as messagesActions, messagesSelectors } from '../../slices/mess
 import { useEffect, useRef } from 'react';
 import socket from '../../initSocket.js';
 import { useState } from 'react';
+import { useApi } from '../../hooks/index.jsx';
+import useAuth from '../../hooks/index.jsx';
+import * as yup from 'yup';
 
 
 
 const MessagesBox = () => {
+  const { user } = useAuth();
+  const socketApi = useApi();
+  const username = user.username ?? null
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [messageState, setMessageState] = useState('g');
@@ -22,27 +28,42 @@ const MessagesBox = () => {
   const inputEl = useRef(null);
   const lastMessageRef = useRef(null);
 
-  socket.on('newMessage', (payload,) => {
-    dispatch(messagesActions.addMessage(payload));
-  })
+  // socket.on('newMessage', (payload,) => {
+  //   dispatch(messagesActions.addMessage(payload));
+  // })
+
+  const validationSchema = yup.object().shape({
+    body: yup
+      .string()
+      .trim()
+      .required('Required'),
+  });
 
   const formik = useFormik({
-    initialValues: { text: '' },
+    initialValues: { body: '' },
+    validationSchema,
     onSubmit: (values, {resetForm}) => {
-      const messageData = { body: values.text, channelId: currentChannel, username: 'admin' };
-      socket.emit('newMessage', messageData, (response) => {
-        if (response.status === 'ok') {
-          resetForm();
-        } else {
-          setMessageState('notSent');
-        }
-      });
+      const messageData = {
+        body: values.body,
+        channelId: currentChannel,
+        username,
+      };
+      
+      socketApi.sendMessage(messageData);
+      resetForm();
+      // socket.emit('newMessage', messageData, (response) => {
+      //   if (response.status === 'ok') {
+      //     resetForm();
+      //   } else {
+      //     setMessageState('notSent');
+      //   }
+      // });
     }
   });
 
   useEffect(() => {
     inputEl.current.focus();
-  }, [currentChannel]);
+  }, [currentChannel, messages]);
 
   useEffect(() => {
     lastMessageRef?.current?.scrollIntoView();
@@ -78,13 +99,13 @@ const MessagesBox = () => {
             <Form.Group className="input-group has-validation">
               <Form.Control 
                 ref={inputEl}
-                type= "text"
-                name="text"
+                name="body"
                 placeholder={t('mainPage.placeholder')}
-                value={formik.values.text}
+                value={formik.values.body}
                 onChange={formik.handleChange}
                 className="border-0 p-0 ps-2 form-control"
                 onFocus={() => setMessageState(null)}
+                disabled={formik.isSubmitting}
               />
               <button type="submit" className="btn btn-group-vertical" >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">

@@ -6,10 +6,12 @@ import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { actions as channelsActions, channelsSelectors } from '../../../slices/channelsSlice.js';
 import socket from "../../../initSocket.js";
+import { useApi } from "../../../hooks/index.jsx";
 
 
 const ModalAdd = ({ handleClose }) => {
   const { t } = useTranslation();
+  const socketApi = useApi();
   const [validityForm, setValidityForm] = useState(null);
   const channels = useSelector(channelsSelectors.selectAll);
   const channelsName = channels.map((channel) => channel.name);
@@ -17,20 +19,24 @@ const ModalAdd = ({ handleClose }) => {
   const feedback = {
     notUnique: t('mainPage.modal.err_feedback_add'),
     emptyField: t('mainPage.modal.err_feedback_field'),
-  }
+  };
+
   const validationSchema = Yup.object({
     channelName: Yup.string()
-      .min(1).required(feedback.emptyField).notOneOf(channelsName, feedback.notUnique),
-  })
+      .trim().required(feedback.emptyField)
+      .notOneOf(channelsName, feedback.notUnique).required(feedback.notUnique),
+  });
+
   const formik = useFormik({
     initialValues: { channelName: '' },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const newChannelName = values.channelName.trim();
-        socket.emit('newChannel', { name: newChannelName});
-        handleClose();
-    }
-  })
+      socketApi.createChannel({ name: newChannelName })
+      // socket.emit('newChannel', { name: newChannelName});
+      handleClose();
+    },
+  });
 
   return (
     <Modal show='show' onHide={handleClose} animation={false}>
@@ -54,10 +60,10 @@ const ModalAdd = ({ handleClose }) => {
               : null}
           </FormGroup>
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            <Button variant="secondary" className="m-2" onClick={handleClose}>
+            <Button variant="secondary" className="m-4" onClick={handleClose}>
               {t('mainPage.modal.cancel')}
             </Button>
-            <Button type="submit" className="m-2" variant='dark'>
+            <Button type="submit" className="m-4" variant='dark'>
               {t('mainPage.add')}
             </Button>
           </div>

@@ -2,24 +2,37 @@ import React from 'react';
 import NotFound from './notFound.jsx';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import LoginPage from './loginPage.jsx'
+import Registration from './regestration.jsx';
 import Navbar from './navbar.jsx';
 import MainPage from './mainPage/index.jsx';
-import AuthContext from '../contexts/index.jsx';
+import { AuthContext } from '../contexts/index.jsx';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import store from '../slices/index.js';
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const [user, setUser] = useState(currentUser ? { username: currentUser.username } : null);
+  const logIn = (userData) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser({ username: userData.username });
+  };
 
-  const logIn = () => setLoggedIn(true);
   const logOut = () => {
-    localStorage.removeItem('userId');
-    setLoggedIn(false);
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  const getAuthHeader = () => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    return userData?.token ? { Authorization: `Bearer ${userData.token}` } : {};
   };
 
   return (
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <AuthContext.Provider value={{
+      logIn, logOut, getAuthHeader, user,
+    }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -37,7 +50,6 @@ const WelcomeComponent = () => {
 
 function App() {
   return (
-    <Provider store={store}>
       <BrowserRouter>
         <AuthProvider>
           <div className='d-flex flex-column h-100'>
@@ -47,13 +59,13 @@ function App() {
               <Routes>
                 <Route path="login" element={<LoginPage />} />
                 <Route path="/" element={<MainPage />} />
+                <Route path='signup' element={<Registration />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
           </div>
           </AuthProvider>
         </BrowserRouter>
-      </Provider>
   );
 };
 

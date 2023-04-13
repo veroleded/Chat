@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
 
-const loginPage = ( {props }) => {
+const loginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,18 +16,17 @@ const loginPage = ( {props }) => {
   const auth = useAuth();
 
   const validationSchema = Yup.object({
-    username: Yup.string().max(15, t('loginPage.err_message.usernameMax')).required(t('loginPage.err_message.usernameRequired')),
-    password: Yup.string().min(5, t('loginPage.err_message.passwordMin')).required(t('loginPage.err_message.passwordRequired')),
+    username: Yup.string().trim().required(t('loginPage.err_message.usernameRequired')),
+    password: Yup.string().trim().required(t('loginPage.err_message.passwordRequired')),
   });
 
   const formik = useFormik({
     initialValues: { username: '', password: '' },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: async (values) => {
       try {
         const response = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', response.data.token);
-        auth.logIn();
+        auth.logIn(response.data);
         navigate('/');
       } catch(e) {
         setValidity('is-invalid');
@@ -38,14 +37,11 @@ const loginPage = ( {props }) => {
   return (
     <div className="container-fluid">
       <div className="row justify-content-center pt-5">
-        <div className="col-sm-4">
+          <Form onSubmit={formik.handleSubmit} className='w-50'>
             <h2 className="text-center">
               {t('loginPage.login')}
             </h2>
-          </div> 
-          <Form onSubmit={formik.handleSubmit}>
-
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label>{t('loginPage.name')}</Form.Label>
               <Form.Control
                 type="text"
@@ -74,12 +70,12 @@ const loginPage = ( {props }) => {
                 value={formik.values.password}
                 placeholder={t('loginPage.placeholder_password')}
               />
-              <Form.Control.Feedback type="invalid">{
-                t('loginPage.err_feedback_msge')}
-              </Form.Control.Feedback>
               {formik.touched.password && formik.errors.password
                 ? (<p className='feedback m-0 position-absolute small text-danger'>{formik.errors.password}</p>)
                 : null}
+              <Form.Control.Feedback type="invalid">{
+                t('loginPage.err_feedback_msge')}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
               
@@ -90,6 +86,10 @@ const loginPage = ( {props }) => {
               </Button>
             </div>
           </Form>
+          <div className="text-center">
+            <span>{t('loginPage.noAccount')} </span>
+            <a href="/signup" className='text-dark'>{t('loginPage.registration')}</a>
+          </div>
         </div>
       </div>
   );

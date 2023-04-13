@@ -15,21 +15,21 @@ const ChannelsBox = ({ handleModal }) => {
   const generalChannelId = useSelector((state) => state.channels.ids[0]);
   const { t } = useTranslation(); 
   
-  socket.on('newChannel', (payload) => {
-    dispatch(channelsActions.addChannel(payload));
-    dispatch(channelsActions.setCurrentChannelId(payload.id));
-  })
+  // socket.on('newChannel', (payload) => {
+  //   dispatch(channelsActions.addChannel(payload));
+  //   dispatch(channelsActions.setCurrentChannelId(payload.id));
+  // })
 
-  socket.on('removeChannel', (payload) => {
-    dispatch(channelsActions.removeChannel(payload.id));
-    if (currentChannel === payload.id) {
-      dispatch(channelsActions.setCurrentChannelId(generalChannelId));
-    }
-  });
+  // socket.on('removeChannel', (payload) => {
+  //   dispatch(channelsActions.removeChannel(payload.id));
+  //   if (currentChannel === payload.id) {
+  //     dispatch(channelsActions.setCurrentChannelId(generalChannelId));
+  //   }
+  // });
 
-  socket.on('renameChannel', (payload) => {
-    dispatch(channelsActions.renameChannel(payload))
-  })
+  // socket.on('renameChannel', (payload) => {
+  //   dispatch(channelsActions.renameChannel(payload))
+  // });
 
   const handleChannelClick = (id) => () => {
     dispatch(channelsActions.setCurrentChannelId(id));

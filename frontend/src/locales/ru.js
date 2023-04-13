@@ -8,6 +8,8 @@ export default {
       submit: 'Отправить',
       err_feedback_msge: 'Неверный никнейм или пароль',
       login: 'Вход',
+      noAccount: 'Нет аккаунта?',
+      registration: 'Регистрация',
       err_message: {
         usernameMax: 'Должно быть 15 символов или меньше',
         usernameRequired: 'Никнейм является обязательным',
@@ -40,7 +42,23 @@ export default {
         removeQuestion: 'Вы уверены?',
         err_feedback_add: 'Такой канал уже существует',
         err_feedback_field: 'Поле обязательно',
+        err_feedback_space: 'Имя канала должно содержать символы'
       },
     },
+    signup: {
+      required: 'Обязательное поле',
+      passMin: 'Не менее 6 символов',
+      mustMatch: 'Пароли должны совпадать',
+      username: 'Имя пользователя',
+      usernameConstraints: 'От 3 до 20 символов',
+      password: 'Пароль',
+      confirm: 'Подтвердите пароль',
+      alreadyExists: 'Такой пользователь уже существует',
+      submit: 'Зарегистрироваться',
+      header: 'Регистрация',
+      haveAccount: 'Есть аккаунт?',
+      login: 'Войти',
+    },
+    logaut: 'Выйти',
   },
 };
