@@ -24,11 +24,13 @@ const ChannelsBox = ({ handleModal }) => {
           onClick={handleChannelClick(channel.id)}
         >
           <span className="me-1">#</span>
-          {channel.id === currentChannel ? <u>{channel.name}</u> : channel.name}
+          {channel.id === currentChannel ? <b>{channel.name}</b> : channel.name}
         </button>
         {channel.removable ? (
           <>
-            <Dropdown.Toggle variant id="dropdownChannel" className="overflow-auto" />
+            <Dropdown.Toggle variant id="dropdownChannel" className="overflow-auto">
+              <span className="visually-hidden">{t('channels.menu')}</span>
+            </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={handleModal({ modalType: 'rename', target: channel.id })}>
                 {t('mainPage.rename')}

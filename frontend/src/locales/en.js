@@ -1,5 +1,7 @@
 export default {
   translation: {
+    logo: 'Hexlet Chat',
+    newMessage: 'New message',
     loginPage: {
       name: 'Username',
       password: 'Password',

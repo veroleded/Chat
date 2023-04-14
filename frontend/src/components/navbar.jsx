@@ -11,8 +11,8 @@ const Navb = () => {
   return (
     <Navbar bg="dark" className="navbar-dark" expand="lg">
       <div className="container">
-        <Navbar.Brand className="p-3" as={Link} to="/">
-          Veroled Chat
+        <Navbar.Brand className="p-3" as={Link} to={routes.mainPathPage()}>
+          {t('logo')}
         </Navbar.Brand>
         {!!user && (
           <Button onClick={logOut} as={Link} to={routes.loginPathPage()} className="btn-dark p-3 float-right">

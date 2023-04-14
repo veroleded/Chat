@@ -99,6 +99,7 @@ const MessagesBox = () => {
                 onChange={formik.handleChange}
                 className="border-0 p-0 ps-2 form-control"
                 disabled={formik.isSubmitting}
+                aria-label={t('newMessage')}
               />
               <Button variant="group-vertical" type="submit" disabled={isInvalid}>
                 <ArrowRightSquare size={20} />
