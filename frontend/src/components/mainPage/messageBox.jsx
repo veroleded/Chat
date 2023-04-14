@@ -81,7 +81,7 @@ const MessagesBox = () => {
               return (
                 <div className="text-break mb-2" ref={ref} key={message.id}>
                   <b>{message.username}</b>
-                  :
+                  {': '}
                   {message.body}
                 </div>
               );

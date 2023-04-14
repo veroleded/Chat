@@ -88,6 +88,7 @@ const LoginPage = () => {
           <span>
             {t('loginPage.noAccount')}
           </span>
+          {' '}
           <a href="/signup" className="text-dark">
             {t('loginPage.registration')}
           </a>

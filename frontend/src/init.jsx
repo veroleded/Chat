@@ -76,7 +76,7 @@ const init = async (socket) => {
 
   const rollbarConfig = {
     enabled: isProduction,
-    accessToken: process.env.ROLLBAR_TOKEN,
+    accessToken: '164e120da45745538d3d912674872682',
     captureUncaught: true,
     captureUnhandledRejections: true,
   };

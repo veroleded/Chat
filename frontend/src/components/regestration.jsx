@@ -142,6 +142,7 @@ const Registration = () => {
           <span>
             {t('signup.haveAccount')}
           </span>
+          {' '}
           <a href="/login" className="text-dark">
             {t('signup.login')}
           </a>
