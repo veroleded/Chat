@@ -1,12 +1,12 @@
 export default {
   translation: {
     loginPage: {
-      name: 'Никнейм',
+      name: 'Ваш ник',
       password: 'Пароль',
       placeholder_name: 'введите никнейм',
       placeholder_password: 'введите пароль',
       submit: 'Отправить',
-      err_feedback_msge: 'Неверный никнейм или пароль',
+      err_feedback_msge: 'Неверное имя пользователя или пароль',
       login: 'Вход',
       noAccount: 'Нет аккаунта?',
       registration: 'Регистрация',
@@ -15,7 +15,7 @@ export default {
         usernameRequired: 'Никнейм является обязательным',
         passwordMin: 'Должно быть 5 символов или больше',
         passwordRequired: 'Пароль является обязательным',
-      }
+      },
     },
     notFoundPage: {
       ops: 'Упс! ',
@@ -34,15 +34,15 @@ export default {
       message_many: '{{count}} сообщений',
       send: 'Отправить',
       placeholder: 'Введите сообщение...',
-      modal:  {
+      modal: {
         cancel: 'Отменить',
         addChannel: 'Добавить канал',
         renameChannel: 'Переименовать канал',
         removeChannel: 'Удалить канал',
         removeQuestion: 'Вы уверены?',
-        err_feedback_add: 'Такой канал уже существует',
+        err_feedback_add: 'Должно быть уникальным',
         err_feedback_field: 'Поле обязательно',
-        err_feedback_space: 'Имя канала должно содержать символы'
+        err_feedback_space: 'Имя канала должно содержать символы',
       },
     },
     signup: {
@@ -60,5 +60,14 @@ export default {
       login: 'Войти',
     },
     logaut: 'Выйти',
+    channelCreate: 'Канал создан',
+    channelRemove: 'Канал удален',
+    channelRename: 'Канал переименован',
+    channelName: 'Имя канала',
+    loading: 'Загрузка',
+    errors: {
+      unknown: 'Неизвестная ошибка',
+      network: 'Ошибка сети',
+    },
   },
 };

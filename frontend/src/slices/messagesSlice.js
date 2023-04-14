@@ -15,11 +15,10 @@ const messagesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(removeChannel, (state, { payload }) => {
       const ids = Object.values(state.entities)
-        .filter((e) => e.channelId !== payload)
-      
+        .filter((e) => e.channelId !== payload);
       messagesAdapter.setAll(state, ids);
-    })
-  }
+    });
+  },
 });
 
 export const { actions } = messagesSlice;

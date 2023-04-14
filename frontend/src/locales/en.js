@@ -15,7 +15,7 @@ export default {
         usernameRequired: 'Username is required',
         passwordMin: 'Must be 5 characters or more',
         passwordRequired: 'Password is required',
-      }
+      },
     },
     notFoundPage: {
       ops: ' Oops!',
@@ -33,7 +33,7 @@ export default {
       message_other: '{{count}} mesages',
       send: 'Send',
       placeholder: 'Enter the message...',
-      modal:  {
+      modal: {
         cancel: 'Cancel',
         addChannel: 'Add channel',
         renameChannel: 'Rename channel',
@@ -59,5 +59,14 @@ export default {
       login: 'login',
     },
     logaut: 'Logaut',
+    channelCreate: 'Channel is created',
+    channelRemove: 'Channel is removed',
+    channelRename: 'Channel is renamed',
+    channelName: 'Channel name',
+    loading: 'loading',
+    errors: {
+      unknown: 'Unknown error',
+      network: 'Network error',
+    },
   },
 };

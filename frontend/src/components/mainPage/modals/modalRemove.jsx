@@ -1,19 +1,25 @@
 import { Modal, Form, FormGroup, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { actions as channelsActions, channelsSelectors } from '../../../slices/channelsSlice.js';
-import socket from "../../../initSocket.js";
 import { useApi } from "../../../hooks/index.jsx";
+import { toast } from "react-toastify";
 
 const ModalRemove = ({ handleClose ,id}) => {
   const { t } = useTranslation();
   const socketApi = useApi();
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    socketApi.removeChannel({id});
-    // socket.emit('removeChannel' , {id});
-    handleClose();
+    setLoading(true);
+    try {
+      await socketApi.removeChannel({id});
+      toast.success(t('channelRemove'));
+      handleClose();
+    } catch(e) {
+      console.error(e);
+    }
+    setLoading(false);
   };
 
   return(
@@ -27,10 +33,10 @@ const ModalRemove = ({ handleClose ,id}) => {
             <p>{t('mainPage.modal.removeQuestion')}</p>
           </FormGroup>
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            <Button variant="secondary" className="m-2" onClick={handleClose}>
+            <Button variant="secondary" className="me-2" onClick={handleClose}>
               {t('mainPage.modal.cancel')}
             </Button>
-            <Button type="submit" className="m-2" variant='danger'>
+            <Button type="submit" className="me-2" disabled={loading} variant='danger'>
               {t('mainPage.remove')}
             </Button>
           </div>

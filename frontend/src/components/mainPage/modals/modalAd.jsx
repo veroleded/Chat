@@ -1,20 +1,21 @@
 import { Modal, Form, FormGroup, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import leoProfanity from 'leo-profanity';
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { actions as channelsActions, channelsSelectors } from '../../../slices/channelsSlice.js';
-import socket from "../../../initSocket.js";
 import { useApi } from "../../../hooks/index.jsx";
+import { toast } from "react-toastify";
 
 
 const ModalAdd = ({ handleClose }) => {
   const { t } = useTranslation();
   const socketApi = useApi();
-  const [validityForm, setValidityForm] = useState(null);
   const channels = useSelector(channelsSelectors.selectAll);
   const channelsName = channels.map((channel) => channel.name);
+  const inputRef = useRef();
 
   const feedback = {
     notUnique: t('mainPage.modal.err_feedback_add'),
@@ -24,18 +25,29 @@ const ModalAdd = ({ handleClose }) => {
   const validationSchema = Yup.object({
     channelName: Yup.string()
       .trim().required(feedback.emptyField)
-      .notOneOf(channelsName, feedback.notUnique).required(feedback.notUnique),
+      .notOneOf(channelsName, feedback.notUnique),
   });
 
   const formik = useFormik({
     initialValues: { channelName: '' },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      const newChannelName = values.channelName.trim();
-      socketApi.createChannel({ name: newChannelName })
-      // socket.emit('newChannel', { name: newChannelName});
-      handleClose();
+    onSubmit: async (values, { setSubmitting, setStatus }) => {
+      const filtredName = leoProfanity.clean(values.channelName);
+      try {
+        await socketApi.createChannel({ name: filtredName });
+        toast.success(t('channelCreate'));
+        handleClose();
+      } catch(err) {
+        setSubmitting(false);
+        inputRef.current.select();
+        if (err.name === 'ValidationError') {
+          formik.values.channelName = filtredName;
+          setStatus(err.message);
+        }
+      }
     },
+    validateOnBlur: false,
+    validateOnChange: false,
   });
 
   return (
@@ -45,28 +57,41 @@ const ModalAdd = ({ handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <FormGroup>
+          <Form.Group>
             <Form.Control
-              variant="dark"
-              type='text'
-              name='channelName'
-              values={formik.values.text}
+              className="mb-2"
+              disabled={formik.isSubmitting}
+              ref={inputRef}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.channelName}
+              isInvalid={(formik.errors.channelName && formik.touched.channelName) || !!formik.status}
+              name="channelName"
+              id="name"
               autoFocus
-              onFocus={() => setValidityForm(null)}
             />
-            {formik.touched.channelName && formik.errors.channelName 
-            ? (<p className='feedback m-0 position-absolute small text-danger'>{formik.errors.channelName}</p>)
-              : null}
-          </FormGroup>
-          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            <Button variant="secondary" className="m-4" onClick={handleClose}>
-              {t('mainPage.modal.cancel')}
-            </Button>
-            <Button type="submit" className="m-4" variant='dark'>
-              {t('mainPage.add')}
-            </Button>
-          </div>
+            <label className="visually-hidden" htmlFor="name">{t('channelName')}</label>
+            <Form.Control.Feedback type="invalid">
+              {t(formik.errors.channelName) || t(formik.status)}
+            </Form.Control.Feedback>
+            <div className="d-flex justify-content-end">
+              <Button
+                className="me-2"
+                variant="secondary"
+                type="button"
+                onClick={handleClose}
+              >
+                {t('mainPage.modal.cancel')}
+              </Button>
+              <Button
+                variant="dark"
+                type="submit"
+                disabled={formik.isSubmitting}
+              >
+                {t('mainPage.add')}
+              </Button>
+            </div>
+          </Form.Group>
         </Form>
       </Modal.Body>
     </Modal>
@@ -74,3 +99,4 @@ const ModalAdd = ({ handleClose }) => {
 };
 
 export default ModalAdd;
+

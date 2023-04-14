@@ -9,10 +9,12 @@ const Navb = () => {
   const { t } = useTranslation();
   return (
     <Navbar bg="dark" className="navbar-dark" expand="lg">
+      <div className="container">
       <Navbar.Brand className="p-3" as={Link} to="/">
         Veroled's Chat
       </Navbar.Brand>
-      {!!user && <Button onClick={logOut} as={Link} to="login" className='btn-dark p-3'>{t('logaut')}</Button>}
+      {!!user && <Button onClick={logOut} as={Link} to="login" className='btn-dark p-3 float-right'>{t('logaut')}</Button>}
+      </div>
     </Navbar>
   );
 };

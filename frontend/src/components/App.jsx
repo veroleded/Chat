@@ -6,6 +6,7 @@ import Registration from './regestration.jsx';
 import Navbar from './navbar.jsx';
 import MainPage from './mainPage/index.jsx';
 import { AuthContext } from '../contexts/index.jsx';
+import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import store from '../slices/index.js';
@@ -64,6 +65,7 @@ function App() {
               </Routes>
             </div>
           </div>
+          <ToastContainer theme="dark"/>
           </AuthProvider>
         </BrowserRouter>
   );
