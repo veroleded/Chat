@@ -1,23 +1,21 @@
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
-import {Provider as RollbarProvider, ErrorBoundary} from '@rollbar/react';
-import App from './components/App';
 import leoProfanity from 'leo-profanity';
-
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+import App from './components/App';
 import resources from './locales/index.js';
-
 import store from './slices/index.js';
 import { ApiContext } from './contexts';
-import { actions as channelsActions, channelsSelectors } from './slices/channelsSlice.js';
-import { actions as messagesActions, messagesSelectors } from './slices/messagesSlice.js';
+import { actions as channelsActions } from './slices/channelsSlice.js';
+import { actions as messagesActions } from './slices/messagesSlice.js';
 
 const init = async (socket) => {
-
   const ru = leoProfanity.getDictionary('ru');
   leoProfanity.add(ru);
 
   const withAcknowledgement = (socketFunc) => (...args) => new Promise((resolve, reject) => {
+    // eslint-disable-next-line
     let state = 'pending';
     const timer = setTimeout(() => {
       state = 'rejected';
@@ -45,7 +43,7 @@ const init = async (socket) => {
     removeChannel: withAcknowledgement((...args) => socket.volatile.emit('removeChannel', ...args)),
   };
 
-  socket.on('newMessage', (payload,) => {
+  socket.on('newMessage', (payload) => {
     store.dispatch(messagesActions.addMessage(payload));
   });
   socket.on('newChannel', (payload) => {
@@ -61,10 +59,9 @@ const init = async (socket) => {
     }
   });
   socket.on('renameChannel', (payload) => {
-    store.dispatch(channelsActions.
-      renameChannel({ id: payload.id, changes: { name: payload.name } }));
+    store.dispatch(channelsActions
+      .renameChannel({ id: payload.id, changes: { name: payload.name } }));
   });
-
 
   const i18n = i18next.createInstance();
 
@@ -72,11 +69,11 @@ const init = async (socket) => {
     .use(initReactI18next)
     .init({
       resources,
-      fallbackLng: "ru",
+      fallbackLng: 'ru',
     });
 
   const isProduction = process.env.NODE_ENV === 'production';
-  
+
   const rollbarConfig = {
     enabled: isProduction,
     accessToken: process.env.ROLLBAR_TOKEN,
@@ -84,11 +81,10 @@ const init = async (socket) => {
     captureUnhandledRejections: true,
   };
 
-
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
-        <Provider store={store} >
+        <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <ApiContext.Provider value={api}>
               <App />

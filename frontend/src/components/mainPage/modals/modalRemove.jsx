@@ -1,29 +1,31 @@
-import { Modal, Form, FormGroup, Button } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { useApi } from "../../../hooks/index.jsx";
-import { toast } from "react-toastify";
+import {
+  Modal, Form, FormGroup, Button,
+} from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { useApi } from '../../../hooks/index.jsx';
 
-const ModalRemove = ({ handleClose ,id}) => {
+const ModalRemove = ({ handleClose, id }) => {
   const { t } = useTranslation();
   const socketApi = useApi();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await socketApi.removeChannel({id});
+      await socketApi.removeChannel({ id });
       toast.success(t('channelRemove'));
       handleClose();
-    } catch(e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
     }
     setLoading(false);
   };
 
-  return(
-    <Modal show='show' onHide={handleClose} animation={false}>
+  return (
+    <Modal show="show" onHide={handleClose} animation={false}>
       <Modal.Header closeButton>
         <Modal.Title>{t('mainPage.modal.removeChannel')}</Modal.Title>
       </Modal.Header>
@@ -36,7 +38,7 @@ const ModalRemove = ({ handleClose ,id}) => {
             <Button variant="secondary" className="me-2" onClick={handleClose}>
               {t('mainPage.modal.cancel')}
             </Button>
-            <Button type="submit" className="me-2" disabled={loading} variant='danger'>
+            <Button type="submit" className="me-2" disabled={loading} variant="danger">
               {t('mainPage.remove')}
             </Button>
           </div>

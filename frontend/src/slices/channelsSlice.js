@@ -13,6 +13,7 @@ const channelsSlice = createSlice({
     removeChannel: channelsAdapter.removeOne,
     renameChannel: channelsAdapter.updateOne,
     setCurrentChannelId: (state, { payload }) => {
+      // eslint-disable-next-line
       state.currentChannelId = payload;
     },
   },

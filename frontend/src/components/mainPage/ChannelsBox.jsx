@@ -1,35 +1,14 @@
-import { Dropdown, ButtonGroup, Button} from "react-bootstrap";
-import { PlusSquare } from "react-bootstrap-icons";
-import cn from 'classnames';
+import { Dropdown, ButtonGroup, Button } from 'react-bootstrap';
+import { PlusSquare } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions as channelsActions, channelsSelectors } from '../../slices/channelsSlice.js';
-import { actions as messagesActions, messagesSelectors } from '../../slices/messagesSlice.js';
-
 
 const ChannelsBox = ({ handleModal }) => {
   const dispatch = useDispatch();
   const channels = useSelector(channelsSelectors.selectAll);
-  const messagesState = useSelector(messagesSelectors.selectAll);
   const currentChannel = useSelector((state) => state.channels.currentChannelId);
-  const generalChannelId = useSelector((state) => state.channels.ids[0]);
-  const { t } = useTranslation(); 
-  
-  // socket.on('newChannel', (payload) => {
-  //   dispatch(channelsActions.addChannel(payload));
-  //   dispatch(channelsActions.setCurrentChannelId(payload.id));
-  // })
-
-  // socket.on('removeChannel', (payload) => {
-  //   dispatch(channelsActions.removeChannel(payload.id));
-  //   if (currentChannel === payload.id) {
-  //     dispatch(channelsActions.setCurrentChannelId(generalChannelId));
-  //   }
-  // });
-
-  // socket.on('renameChannel', (payload) => {
-  //   dispatch(channelsActions.renameChannel(payload))
-  // });
+  const { t } = useTranslation();
 
   const handleChannelClick = (id) => () => {
     dispatch(channelsActions.setCurrentChannelId(id));
@@ -47,28 +26,23 @@ const ChannelsBox = ({ handleModal }) => {
           <span className="me-1">#</span>
           {channel.id === currentChannel ? <u>{channel.name}</u> : channel.name}
         </button>
-        {channel.removable
-          ? <>
-            <Dropdown.Toggle variant id="dropdownChannel"  className="overflow-auto"/>
+        {channel.removable ? (
+          <>
+            <Dropdown.Toggle variant id="dropdownChannel" className="overflow-auto" />
             <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={handleModal({ modalType: 'rename', target: channel.id })}
-              >
+              <Dropdown.Item onClick={handleModal({ modalType: 'rename', target: channel.id })}>
                 {t('mainPage.rename')}
               </Dropdown.Item>
-              <Dropdown.Item
-                onClick={handleModal({ modalType: 'remove', target: channel.id })}
-              >
+              <Dropdown.Item onClick={handleModal({ modalType: 'remove', target: channel.id })}>
                 {t('mainPage.remove')}
               </Dropdown.Item>
             </Dropdown.Menu>
-            </>
-            : null          
-        }
+          </>
+        ) : null}
       </Dropdown>
     </li>
   ));
-  
+
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column  d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -87,7 +61,6 @@ const ChannelsBox = ({ handleModal }) => {
         {Channels}
       </ul>
     </div>
-
   );
 };
 

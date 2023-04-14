@@ -1,14 +1,13 @@
-import { Modal, Form, FormGroup, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { Modal, Form, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import leoProfanity from 'leo-profanity';
-import { useTranslation } from "react-i18next";
-import { useState, useRef } from "react";
-import { useFormik } from "formik";
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { useEffect, useRef } from 'react';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { actions as channelsActions, channelsSelectors } from '../../../slices/channelsSlice.js';
-import { useApi } from "../../../hooks/index.jsx";
-import { toast } from "react-toastify";
-
+import { channelsSelectors } from '../../../slices/channelsSlice.js';
+import { useApi } from '../../../hooks/index.jsx';
 
 const ModalAdd = ({ handleClose }) => {
   const { t } = useTranslation();
@@ -24,20 +23,25 @@ const ModalAdd = ({ handleClose }) => {
 
   const validationSchema = Yup.object({
     channelName: Yup.string()
-      .trim().required(feedback.emptyField)
+      .trim()
+      .required(feedback.emptyField)
       .notOneOf(channelsName, feedback.notUnique),
   });
 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   const formik = useFormik({
     initialValues: { channelName: '' },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: async (values, { setSubmitting, setStatus }) => {
       const filtredName = leoProfanity.clean(values.channelName);
       try {
         await socketApi.createChannel({ name: filtredName });
         toast.success(t('channelCreate'));
         handleClose();
-      } catch(err) {
+      } catch (err) {
         setSubmitting(false);
         inputRef.current.select();
         if (err.name === 'ValidationError') {
@@ -51,7 +55,7 @@ const ModalAdd = ({ handleClose }) => {
   });
 
   return (
-    <Modal show='show' onHide={handleClose} animation={false}>
+    <Modal show="show" onHide={handleClose} animation={false}>
       <Modal.Header closeButton>
         <Modal.Title>{t('mainPage.modal.addChannel')}</Modal.Title>
       </Modal.Header>
@@ -65,29 +69,24 @@ const ModalAdd = ({ handleClose }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.channelName}
-              isInvalid={(formik.errors.channelName && formik.touched.channelName) || !!formik.status}
+              isInvalid={
+                (formik.errors.channelName && formik.touched.channelName) || !!formik.status
+              }
               name="channelName"
               id="name"
               autoFocus
             />
-            <label className="visually-hidden" htmlFor="name">{t('channelName')}</label>
+            <label className="visually-hidden" htmlFor="name">
+              {t('channelName')}
+            </label>
             <Form.Control.Feedback type="invalid">
               {t(formik.errors.channelName) || t(formik.status)}
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button
-                className="me-2"
-                variant="secondary"
-                type="button"
-                onClick={handleClose}
-              >
+              <Button className="me-2" variant="secondary" type="button" onClick={handleClose}>
                 {t('mainPage.modal.cancel')}
               </Button>
-              <Button
-                variant="dark"
-                type="submit"
-                disabled={formik.isSubmitting}
-              >
+              <Button variant="dark" type="submit" disabled={formik.isSubmitting}>
                 {t('mainPage.add')}
               </Button>
             </div>
@@ -99,4 +98,3 @@ const ModalAdd = ({ handleClose }) => {
 };
 
 export default ModalAdd;
-
