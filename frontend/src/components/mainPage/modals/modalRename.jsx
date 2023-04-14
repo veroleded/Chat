@@ -84,7 +84,7 @@ const ModalRename = ({ handleClose, id }) => {
               {t(formik.errors.channelName) || t(formik.status)}
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button className="me-2" variant="secondary" type="button">
+              <Button className="me-2" variant="secondary" type="button" onClick={handleClose}>
                 {t('mainPage.modal.cancel')}
               </Button>
               <Button variant="dark" type="submit" disabled={formik.isSubmitting}>
