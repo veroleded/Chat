@@ -18,7 +18,7 @@ const init = async (socket) => {
   leoProfanity.add(ru);
 
   const withAcknowledgement = (socketFunc) => (...args) => new Promise((resolve, reject) => {
-    let state = 'pending'; // eslint-disable-line
+    let state = 'pending';
     const timer = setTimeout(() => {
       state = 'rejected';
       reject();
@@ -79,30 +79,23 @@ const init = async (socket) => {
   
   const rollbarConfig = {
     enabled: isProduction,
-    accessToken: '466d65549a794b0d9068c8b35610aebd',
+    accessToken: process.env.ROLLBAR_TOKEN,
     captureUncaught: true,
     captureUnhandledRejections: true,
   };
 
-  function TestError() {
-    const a = null;
-    return a.hello();
-  }
 
   return (
     <RollbarProvider config={rollbarConfig}>
-      
+      <ErrorBoundary>
         <Provider store={store} >
           <I18nextProvider i18n={i18n}>
             <ApiContext.Provider value={api}>
               <App />
-              <ErrorBoundary>
-              <TestError />
-              </ErrorBoundary>
             </ApiContext.Provider>
           </I18nextProvider>
         </Provider>
-      
+      </ErrorBoundary>
     </RollbarProvider>
   );
 };
