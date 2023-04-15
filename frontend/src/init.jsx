@@ -75,17 +75,8 @@ const init = async (socket) => {
   const isProduction = process.env.NODE_ENV === 'production';
 
   const rollbarConfig = {
-    enamble: isProduction,
-    accessToken: '466d65549a794b0d9068c8b35610aebd',
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-    payload: {
-      environment: 'production',
-    },
-  };
-  const TestError = () => {
-    const arr = null;
-    arr.man();
+    enabled: isProduction,
+    accessToken: process.env.ROLLBAR_TOKEN,
   };
 
   return (
@@ -95,7 +86,6 @@ const init = async (socket) => {
           <ApiContext.Provider value={api}>
             <ErrorBoundary>
               <App />
-              <TestError />
             </ErrorBoundary>
           </ApiContext.Provider>
         </I18nextProvider>
