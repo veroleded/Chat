@@ -29,7 +29,7 @@ const ChannelsBox = ({ handleModal }) => {
         {channel.removable ? (
           <>
             <Dropdown.Toggle variant id="dropdownChannel" className="overflow-auto">
-              <span className="visually-hidden">{t('channels.menu')}</span>
+              <span className="visually-hidden">{t('channelsMenu')}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={handleModal({ modalType: 'remove', target: channel.id })}>

@@ -74,7 +74,7 @@ const ModalRename = ({ handleClose, id }) => {
                 (formik.errors.channelName && formik.touched.channelName) || !!formik.status
               }
               name="channelName"
-              id="name"
+              id="channelName"
               autoFocus
             />
             <label className="visually-hidden" htmlFor="channelName">

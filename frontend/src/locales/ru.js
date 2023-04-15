@@ -2,6 +2,7 @@ export default {
   translation: {
     newMessage: 'Новое сообщение',
     logo: 'Hexlet chat',
+    channelsMenu: 'Управление каналом',
     loginPage: {
       name: 'Ваш ник',
       password: 'Пароль',
