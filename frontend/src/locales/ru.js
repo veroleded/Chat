@@ -64,7 +64,7 @@ export default {
     },
     logaut: 'Выйти',
     channelCreate: 'Канал создан',
-    channelRemove: 'Канал удален',
+    channelRemove: 'Канал удалён',
     channelRename: 'Канал переименован',
     channelName: 'Имя канала',
     loading: 'Загрузка',
