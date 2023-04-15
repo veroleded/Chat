@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 import useAuth from '../hooks/index.jsx';
@@ -89,9 +89,9 @@ const LoginPage = () => {
             {t('loginPage.noAccount')}
           </span>
           {' '}
-          <a href="/signup" className="text-dark">
+          <Link to="/signup" className="text-dark">
             {t('loginPage.registration')}
-          </a>
+          </Link>
         </div>
       </div>
     </div>
