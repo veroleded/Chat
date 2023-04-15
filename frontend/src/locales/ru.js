@@ -1,7 +1,7 @@
 export default {
   translation: {
     newMessage: 'Новое сообщение',
-    logo: 'Хекслет чат',
+    logo: 'Hexlet chat',
     loginPage: {
       name: 'Ваш ник',
       password: 'Пароль',
