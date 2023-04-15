@@ -72,13 +72,13 @@ const init = async (socket) => {
       fallbackLng: 'ru',
     });
 
-  const isProduction = process.env.NODE_ENV === 'production';
-
   const rollbarConfig = {
-    enabled: isProduction,
-    accessToken: '164e120da45745538d3d912674872682',
+    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     captureUncaught: true,
     captureUnhandledRejections: true,
+    payload: {
+      environment: 'production',
+    },
   };
 
   return (
