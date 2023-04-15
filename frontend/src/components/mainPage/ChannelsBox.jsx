@@ -32,11 +32,11 @@ const ChannelsBox = ({ handleModal }) => {
               <span className="visually-hidden">{t('channels.menu')}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={handleModal({ modalType: 'rename', target: channel.id })}>
-                {t('mainPage.rename')}
-              </Dropdown.Item>
               <Dropdown.Item onClick={handleModal({ modalType: 'remove', target: channel.id })}>
                 {t('mainPage.remove')}
+              </Dropdown.Item>
+              <Dropdown.Item onClick={handleModal({ modalType: 'rename', target: channel.id })}>
+                {t('mainPage.rename')}
               </Dropdown.Item>
             </Dropdown.Menu>
           </>

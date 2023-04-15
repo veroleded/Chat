@@ -77,7 +77,7 @@ const ModalRename = ({ handleClose, id }) => {
               id="name"
               autoFocus
             />
-            <label className="visually-hidden" htmlFor="name">
+            <label className="visually-hidden" htmlFor="channelName">
               {t('channelName')}
             </label>
             <Form.Control.Feedback type="invalid">
