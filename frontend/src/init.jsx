@@ -72,26 +72,34 @@ const init = async (socket) => {
       fallbackLng: 'ru',
     });
 
+  const isProduction = process.env.NODE_ENV === 'production';
+
   const rollbarConfig = {
-    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+    enamble: isProduction,
+    accessToken: '466d65549a794b0d9068c8b35610aebd',
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
       environment: 'production',
     },
   };
+  const TestError = () => {
+    const arr = null;
+    arr.man();
+  };
 
   return (
     <RollbarProvider config={rollbarConfig}>
-      <ErrorBoundary>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18n}>
-            <ApiContext.Provider value={api}>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>
+          <ApiContext.Provider value={api}>
+            <ErrorBoundary>
               <App />
-            </ApiContext.Provider>
-          </I18nextProvider>
-        </Provider>
-      </ErrorBoundary>
+              <TestError />
+            </ErrorBoundary>
+          </ApiContext.Provider>
+        </I18nextProvider>
+      </Provider>
     </RollbarProvider>
   );
 };
