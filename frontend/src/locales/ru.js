@@ -8,7 +8,7 @@ export default {
       placeholder_name: 'введите никнейм',
       placeholder_password: 'введите пароль',
       submit: 'Отправить',
-      err_feedback_msge: 'Неверное имя пользователя или пароль',
+      err_feedback_msge: 'Неверные имя пользователя или пароль',
       login: 'Вход',
       noAccount: 'Нет аккаунта?',
       registration: 'Регистрация',
