@@ -1,6 +1,5 @@
 install:
 	npm ci
-	make -C frontend install
 
 start-backend: 
 	npx start-server
