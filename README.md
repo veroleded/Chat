@@ -1,5 +1,4 @@
-### Hexlet tests and linter status:
-[![Actions Status](https://github.com/veroleded/fullstack-javascript-project-12/workflows/hexlet-check/badge.svg)](https://github.com/veroleded/fullstack-javascript-project-12/actions)
+## Chat for communication with the ability to create and edit channels
 
 ## Link
 https://chat-369t.onrender.com
