@@ -1,7 +1,7 @@
 export default {
   translation: {
     newMessage: 'Новое сообщение',
-    logo: 'Hexlet chat',
+    logo: 'Veroled Chat',
     channelsMenu: 'Управление каналом',
     loginPage: {
       name: 'Ваш ник',
