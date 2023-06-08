@@ -1,6 +1,6 @@
 export default {
   translation: {
-    logo: 'Hexlet Chat',
+    logo: 'Veroled Chat',
     newMessage: 'New message',
     loginPage: {
       name: 'Username',
